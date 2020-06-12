@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>HELP Language trainer Contents Dictionary set V1.1</title>
+<link href="webjars/bootstrap/4.3.1/css/bootstrap.min.css"
+        rel="stylesheet">
+</head>
+<body class="bg-light">
+	<div class="container shadow-sm p-3 mb-5 bg-white rounded">
+		<h4 class="breadcrumb mt-3 mb-3">コンテンツ辞典「登録、選択」画面</h4>
+        <form action="/" method="post">
+        	<div class="form-group row">
+        		<label for="New" class="col-sm-2 col-form-label">新規</label>
+        		<div class="custom-control custom-switch col-sm-8 ml-3">
+				  <input type="checkbox" class="custom-control-input" id="new-on-off">
+				  <label class="custom-control-label" for="new-on-off" id="on-off">off</label>
+				</div>
+        	</div>
+            <div id="new-dict" class="form-group row">
+				<label for="New-dictionary-name" class="col-sm-2 col-form-label">新辞典名</label>
+			  	<div class="col-sm-6">
+			    	<input type="text" class="form-control" id="new-dict-name" placeholder="English-China">
+			  	</div>
+			  	<div class="col-sm-2">
+			  		<a href="/" class="btn btn-secondary">設定</a>
+			  	</div>
+			</div>
+			<div id="exist-dict" class="form-group row">
+				<label for="Exist-dictionary-names" class="col-sm-2 col-form-label">既存辞典リスト</label>
+			  	<div class="col-sm-6">
+			    	<select name="exist-dict-names" class="custom-select">
+					  <option value="1" selected>English-Japan</option>
+					  <option value="2">English-Korea</option>
+					</select>
+			  	</div>
+			  	<div class="col-sm-2">
+			  		<a href="/" class="btn btn-secondary">設定</a>
+			  	</div>
+			</div>
+        </form>
+	</div>
+    <script src="webjars/jquery/3.3.1/jquery.min.js"></script>
+    <script src="webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="js/custom.js"></script>
+</body>
+</html>

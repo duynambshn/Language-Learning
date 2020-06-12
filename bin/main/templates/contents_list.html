@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="https://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>HELP Language trainer Contents Dictionary set V1.1</title>
+	<link th:href="@{webjars/bootstrap/4.3.1/css/bootstrap.min.css}" rel="stylesheet">
+	<link th:href="@{css/dataTables.bootstrap4.min.css}" rel="stylesheet">      
+</head>
+<body class="bg-light">
+	<div class="container shadow-sm p-3 mb-5 bg-white rounded">
+		<h4 class="breadcrumb mt-3 mb-3">コンテンツ一覧</h4>
+           <div class="form-group row">
+           <div class="col-12">
+	           <form action="/" method="post" id="formSearch">
+					<div class="ml-2 form-group row">
+						<label class="col-3 control-label">暗記語文（English）</label> <input type="text" name="txtEng" class="col-8 form-control"/>
+					</div>
+					<div class="ml-2 form-group row">
+						<label class="col-3 control-label">翻訳語文（Japanese）</label>
+						<input type="text" name="txtJpn" class="col-8 form-control"/>
+					</div>
+					<div class="col-12 form-group" style="text-align:right;">
+		        		<input type="submit" value="検索" name="btnEdit" class="ml-2 btn btn-primary"/>
+		        		<input type="reset" value="クリア" name="btnClear" class="btn btn-light ml-2"/>
+		        		<a href="/contents_reg" class="btn btn-secondary ml-2 ">追加</a>
+		        	</div>
+	        	</form>
+           </div>
+		</div>
+		<table th:if="${sentence!=null}" id="tbl-contents" class="table table-bordered dataTable" style="width: 100%;" role="grid" aria-describedby="example_info">
+			<thead>
+				<tr class="tbl-header" role="row">
+					<th class="sorting_asc text-center" tabindex="0" aria-controls="tbl-contents" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Id: activate to sort column descending" style="width: 5%;">ID</th>
+					<th class="sorting text-center" tabindex="0" aria-controls="tbl-contents" rowspan="1" colspan="1" aria-label="English: activate to sort column ascending" style="width: 39%;">暗記語文（English）</th>
+					<th class="sorting text-center" tabindex="0" aria-controls="tbl-contents" rowspan="1" colspan="1" aria-label="Japanese: activate to sort column ascending" style="width: 39%;">翻訳語文（Japanese）</th>
+					<th id="no-sorting" class="text-center" tabindex="0" rowspan="1" colspan="1" style="width: 17%;">作業</th>
+					<!-- <th class="sorting" tabindex="0" aria-controls="tbl-contents" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 81px;">Start date</th>
+					<th class="sorting" tabindex="0" aria-controls="tbl-contents" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending" style="width: 71px;">Salary</th> -->
+				</tr>
+			</thead>
+			<tbody th:each="element, elementStat : ${sentence}">
+				<tr th:if="${elementStat.index}%2 != 0" role="row" class="odd">
+					<td th:text="${element.id}" class="sorting_1"></td>
+					<td th:text="${element.sentence}"></td>
+					<td th:text="${element.translateSentence}"></td>
+					<td>
+				  		<a href="/contents_edit" class="btn btn-primary btn-sm">訂正</a>
+				  		<a href="/" class="btn btn-danger btn-sm">削除</a>
+				  		<a href="/" class="btn btn-success btn-sm">公開</a>
+					</td>
+				</tr>
+				
+				<tr th:unless="${elementStat.index}%2 != 0" role="row" class="even">
+					<td th:text="${element.id}" class="sorting_1"></td>
+					<td th:text="${element.sentence}"></td>
+					<td th:text="${element.translateSentence}"></td>
+					<td>
+				  		<a href="/contents_edit" class="btn btn-primary btn-sm">訂正</a>
+				  		<a href="/" class="btn btn-danger btn-sm">削除</a>
+				  		<a href="/" class="btn btn-success btn-sm">公開</a>
+					</td>
+				</tr>
+			</tbody>
+			<!-- <tfoot>
+				<tr><th rowspan="1" colspan="1">Name</th><th rowspan="1" colspan="1">Position</th><th rowspan="1" colspan="1">Office</th><th rowspan="1" colspan="1">Age</th><th rowspan="1" colspan="1">Start date</th><th rowspan="1" colspan="1">Salary</th></tr>
+			</tfoot> -->
+		</table>
+		<div class="form-group row mt-3">
+		  	<div class="col-sm-12">
+		  		<!-- <a href="/" class="btn btn-secondary">検索</a> -->
+		  		<!-- <a href="/" class="btn btn-secondary">録音</a>
+		  		<a href="/" class="btn btn-secondary">再録音</a>
+		  		<a href="/" class="btn btn-secondary">再生</a> -->
+				<!-- <a href="/" class="btn btn-secondary">クリア</a> -->
+		  		<!-- <a href="/" class="btn btn-secondary">登録</a>
+		  		<a href="/" class="btn btn-secondary">終了</a> -->
+		  	</div>
+		</div>
+	</div>
+    <script th:src="@{webjars/jquery/3.3.1/dist/jquery.min.js}"></script>
+    <script th:src="@{js/jquery.dataTables.min.js}"></script>
+    <script th:src="@{js/dataTables.bootstrap4.min.js}"></script>
+    <script th:src="@{webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+	<script th:src="@{js/custom.js}"></script>
+</body>
+</html>

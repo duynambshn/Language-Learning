@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>HELP Language trainer Contents Dictionary set V1.1</title>
+	<link href="webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/dataTables.bootstrap4.min.css" rel="stylesheet">
+	<link href="css/custom.css" rel="stylesheet">     
+</head>
+<body class="bg-light">
+	<div class="container shadow-sm p-3 mb-5 bg-white rounded">
+		<h4 class="breadcrumb mt-3 mb-3">コンテンツ編集画面</h4>
+		
+        <form action="#" th:action="@{/contents_edit}" th:object="${sentence}" method="post">
+        	<div class="static_reg">
+        		<div class="topic_border">
+					<label class="lbl_topic col-12 control-label font-weight-bold">辞典</label>
+				</div>
+				<div class="ml-2 form-group row">
+					<label class="col-3 control-label">暗記語文（English）</label>
+					<input type="text" name="txtEng" class="col-8 form-control" th:field="*{sentence}"/>
+				</div>
+				<div class="ml-2 form-group row">
+					<label class="col-3 control-label">翻訳語文（Japanese）</label>
+					<input type="text" name="txtJpn" class="col-8 form-control" th:field="*{translateSentence}"/>
+				</div>
+				<div class="ml-2 form-group row">
+					<label class="col-3 control-label">録音</label>
+					<input type="button" name="btnRecord" value="録音" class="col-2 form-control"/>
+					<input type="button" name="btnReRecord" value="再録音" class="ml-2 col-2 form-control"/>
+					<input type="button" name="btnPlay" value="再生" class="ml-2 col-2 form-control"/>
+				</div>
+        	</div>
+        	<div class="col-12 form-group" style="text-align:right;">
+        		<button type="button" data-toggle="modal" data-target="#edit-modal">Modal</button>
+        		<input type="submit" value="編集する" name="btnEdit" class="ml-2 btn btn-primary"/>
+        		<a href="/contents_list" class="btn btn-light ml-2">キャンセル</a>
+        	</div>
+        	<div th:include="modal">
+        	</div>
+        </form>
+	</div>
+    <script src="webjars/jquery/3.3.1/jquery.min.js"></script>
+    <script src="js/jquery.dataTables.min.js"></script>
+    <script src="js/dataTables.bootstrap4.min.js"></script>
+    <script src="webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<!-- <script src="js/custom.js"></script> -->
+</body>
+</html>
