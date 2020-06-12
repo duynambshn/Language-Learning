@@ -1,52 +1,32 @@
 package jp.helpnserve.LTS.Model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
-@Entity // This tells Hibernate to make a table out of this class
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(name = "system")
+@Data
+@NoArgsConstructor
 public class System_tbl {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	@Column(name = "id")
+	private int id;
 
+	@Column(name = "empty_content")
 	private String emptyContent;
 
+	@Column(name = "full_content")
 	private String fullContent;
 
+	@Column(name = "user_id")
 	private String userId;
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getEmptyContent() {
-		return emptyContent;
-	}
-
-	public void setEmptyContent(String emptyContent) {
-		this.emptyContent = emptyContent;
-	}
-
-	public String getFullContent() {
-		return fullContent;
-	}
-
-	public void setFullContent(String fullContent) {
-		this.fullContent = fullContent;
-	}
-
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
 
 }

@@ -22,10 +22,10 @@ public class Sentence {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Integer id;
+	private int id;
 
-	@Column(name = "sentence")
-	private String sentence;
+	@Column(name = "origin_sentence")
+	private String originSentence;
 
 	@Column(name = "translate_sentence")
 	private String translateSentence;
@@ -34,10 +34,10 @@ public class Sentence {
 	private String explanation;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "sound_id")
 	private Sound sound;
 
 	@ManyToOne
-	@JoinColumn(name = "id", nullable = false)
+	@JoinColumn(name = "dictionary_id", nullable = false)
 	private Dictionary dictionary;
 }

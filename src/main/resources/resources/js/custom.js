@@ -22,8 +22,8 @@ $(function(){
 	$(document).ready(function() {
 		/*Data Table Show/Hide*/
 	    $('#tbl-contents').DataTable();
-	    $('#tbl-contents_length').hide();
-	    $('#tbl-contents_filter').hide();
+	    $('#tbl-contents_length').show();
+	    $('#tbl-contents_filter').show();
 	    $('#no-sorting').removeClass("sorting");
 	    $('.tbl-header').on('click', function(){
 			if($('#no-sorting').hasClass("sorting")){

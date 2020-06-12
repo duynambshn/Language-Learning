@@ -33,8 +33,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/", "/home", "/signup", "/*/*/*/*", "/all").permitAll().anyRequest()
-				.authenticated().and().formLogin().loginPage("/login").permitAll().and().logout().permitAll();
+		http.rememberMe().key("uniqueAndSecret").tokenValiditySeconds(1296000);
+
+//		http.authorizeRequests().antMatchers("/", "/home", "/signup", "/*/*/*/*", "/all").permitAll().anyRequest()
+//				.authenticated().and().formLogin().loginPage("/login").permitAll().and().logout().permitAll();
 	}
 
 	@Autowired

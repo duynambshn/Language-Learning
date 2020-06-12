@@ -1,64 +1,81 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org">
+<html lang="ja" xmlns:th="https://www.thymeleaf.org">
 <head>
-	<meta charset="UTF-8">
-	<title>HELP Language trainer Contents Dictionary set V1.1</title>
-	<link href="webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-	<link href="css/dataTables.bootstrap4.min.css" rel="stylesheet">
-	<link href="css/custom.css" rel="stylesheet">     
+<meta charset="UTF-8">
+<title>HELP Language trainer Contents Dictionary set V1.1</title>
+<link th:href="@{webjars/bootstrap/4.3.1/css/bootstrap.min.css}"
+	rel="stylesheet">
+<link th:href="@{css/dataTables.bootstrap4.min.css}" rel="stylesheet">
+<link th:href="@{css/custom.css}" rel="stylesheet">
 </head>
 <body class="bg-light">
 	<div class="container shadow-sm p-3 mb-5 bg-white rounded">
 		<h4 class="breadcrumb mt-3 mb-3">コンテンツ登録画面</h4>
-		
-		<div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${error}">
-			<strong th:text="${error}">	</strong>
-			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+
+		<div class="alert alert-danger alert-dismissible fade show"
+			role="alert" th:if="${error}">
+			<strong th:text="${error}"> </strong>
+			<button type="button" class="close" data-dismiss="alert"
+				aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			</button>
 		</div>
-		
-		<div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${success}">
-			<strong th:text="${success}">	</strong>
-			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+
+		<div class="alert alert-success alert-dismissible fade show"
+			role="alert" th:if="${success}">
+			<strong th:text="${success}"> </strong>
+			<button type="button" class="close" data-dismiss="alert"
+				aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			</button>
 		</div>
-		
-        <form th:action="@{/content-reg}" th:object="${sentence}" method="post" id="formReg" >
-        	<div class="static_reg">
-        		<div class="topic_border">
+
+		<form th:action="@{/content-reg}" th:object="${sentence}"
+			method="post" id="formReg">
+			<div class="static_reg">
+				<div class="topic_border">
 					<label class="lbl_topic col-12 control-label font-weight-bold">辞典</label>
 				</div>
-				
+
+				<input type="hidden" th:field="*{id}">
 				<div class="ml-2 form-group row">
-					<label class="col-3 control-label">暗記語文（English）</label>
-					<input th:field="*{sentence}" type="text" name="txtEng1" class="col-8 form-control"/>
+					<label class="col-3 control-label">暗記語文（English）</label> <input
+						th:field="*{originSentence}" type="text" name="txtEng1"
+						class="col-8 form-control" />
 				</div>
 				<div class="ml-2 form-group row">
-					<label class="col-3 control-label">翻訳語文（Japanese）</label>
-					<input th:field="*{translateSentence}" type="text" name="txtJpn1" class="col-8 form-control"/>
+					<label class="col-3 control-label">翻訳語文（Japanese）</label> <input
+						th:field="*{translateSentence}" type="text" name="txtJpn1"
+						class="col-8 form-control" />
 				</div>
 				<div class="ml-2 form-group row">
-					<label class="col-3 control-label">録音</label>
-					<input type="button" name="btnRecord1" value="録音" class="col-2 form-control"/>
-					<input type="button" name="btnReRecord1" value="再録音" class="ml-2 col-2 form-control"/>
-					<input type="button" name="btnPlay1" value="再生" class="ml-2 col-2 form-control"/>
+					<label class="col-3 control-label">Explanation</label> <input
+						th:field="*{explanation}" type="text"
+						class="col-8 form-control" />
 				</div>
-        	</div>
-        	<div class="col-12 form-group">
-        		<a href="/contents_list" class="btn btn-danger float-right ml-2">キャンセル</a>
-        		<input type="submit" value="登録する" name="btnRegister" class="ml-2 btn btn-success float-right"/>
-        	</div>
-        	<!-- <div class="col-12 static_btn form-group row">
+				<div class="ml-2 form-group row">
+					<label class="col-3 control-label">録音</label> <input type="button"
+						name="btnRecord1" value="録音" class="col-2 form-control" /> <input
+						type="button" name="btnReRecord1" value="再録音"
+						class="ml-2 col-2 form-control" /> <input type="button"
+						name="btnPlay1" value="再生" class="ml-2 col-2 form-control" />
+				</div>
+			</div>
+			<div class="col-12 form-group">
+				<a th:href="@{/contents-list}"
+					class="btn btn-danger float-right ml-2">キャンセル</a> <input
+					type="submit" value="登録する" name="btnRegister"
+					class="ml-2 btn btn-success float-right" />
+			</div>
+			<!-- <div class="col-12 static_btn form-group row">
 	       		<label class="col-3 control-label font-weight-bold mr-2">追加数</label>
 	       		<input type="text" name="txtNumber" id="txt_number" class="ml-2 col-2 form-control"/>
 	       		<button type="button" name="btnPlus" id="btn_plus" class="ml-2 btn btn-secondary">&#43;</button>
 	       	</div> -->
-        </form>
-        
+		</form>
+
 	</div>
-    <!-- <script src="webjars/jquery/3.3.1/jquery.min.js"></script>
+	<!-- <script src="webjars/jquery/3.3.1/jquery.min.js"></script>
     <script src="js/jquery.dataTables.min.js"></script>
     <script src="js/dataTables.bootstrap4.min.js"></script>
     <script src="webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>

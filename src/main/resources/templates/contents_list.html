@@ -22,7 +22,7 @@
 					<div class="col-12 form-group" style="text-align:right;">
 		        		<input type="submit" value="検索" name="btnEdit" class="ml-2 btn btn-primary"/>
 		        		<input type="reset" value="クリア" name="btnClear" class="btn btn-light ml-2"/>
-		        		<a href="/contents_reg" class="btn btn-secondary ml-2 ">追加</a>
+		        		<a href="/contents-reg" class="btn btn-secondary ml-2 ">追加</a>
 		        	</div>
 	        	</form>
            </div>
@@ -41,22 +41,22 @@
 			<tbody th:each="element, elementStat : ${sentence}">
 				<tr th:if="${elementStat.index}%2 != 0" role="row" class="odd">
 					<td th:text="${element.id}" class="sorting_1"></td>
-					<td th:text="${element.sentence}"></td>
+					<td th:text="${element.originSentence}"></td>
 					<td th:text="${element.translateSentence}"></td>
 					<td>
-				  		<a href="/contents_edit" class="btn btn-primary btn-sm">訂正</a>
-				  		<a href="/" class="btn btn-danger btn-sm">削除</a>
+				  		<a th:href="@{/contents-edit/} + ${element.id}" class="btn btn-primary btn-sm">訂正</a>
+				  		<button th:href="@{/contents-del/} + ${element.id}" class="btn btn-danger btn-sm">削除</button>
 				  		<a href="/" class="btn btn-success btn-sm">公開</a>
 					</td>
 				</tr>
 				
 				<tr th:unless="${elementStat.index}%2 != 0" role="row" class="even">
 					<td th:text="${element.id}" class="sorting_1"></td>
-					<td th:text="${element.sentence}"></td>
+					<td th:text="${element.originSentence}"></td>
 					<td th:text="${element.translateSentence}"></td>
 					<td>
-				  		<a href="/contents_edit" class="btn btn-primary btn-sm">訂正</a>
-				  		<a href="/" class="btn btn-danger btn-sm">削除</a>
+				  		<a th:href="@{/contents-edit/} + ${element.id}" class="btn btn-primary btn-sm">訂正</a>
+				  		<button th:href="@{/contents-del/} + ${element.id}" class="btn btn-danger btn-sm">削除</button>
 				  		<a href="/" class="btn btn-success btn-sm">公開</a>
 					</td>
 				</tr>
