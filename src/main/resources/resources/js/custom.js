@@ -2,7 +2,14 @@
  * 
  */
 
-$(function(){
+$(document).ready(function() {
+	$('#example').DataTable( {
+        "scrollY":        "200px",
+        "scrollCollapse": true,
+        "paging":         false
+    } );
+});
+/*$(function(){
   //なにかしらの処理
 	$("#new-dict").hide();
 	$('#new-on-off').on('change', function(){
@@ -19,10 +26,10 @@ $(function(){
 		}
 	});
 	
-	$(document).ready(function() {
+	$(document).ready(function() {*/
 		/*Data Table Show/Hide*/
-	    $('#tbl-contents').DataTable();
-	    $('#tbl-contents_length').show();
+	    //$('#tbl-contents').DataTable();
+	    /*$('#tbl-contents_length').show();
 	    $('#tbl-contents_filter').show();
 	    $('#no-sorting').removeClass("sorting");
 	    $('.tbl-header').on('click', function(){
@@ -32,7 +39,7 @@ $(function(){
 		});
 	    
 	    /*formReg Show/Hide*/
-	    var lastNumber = 0;
+	/*    var lastNumber = 0;
 	    $('#btn_plus').on('click', function(){
 	    	var inputNumber = $('#txt_number').val();
 	    	var startNumber = (lastNumber == 0)? 0: lastNumber;
@@ -67,6 +74,4 @@ $(function(){
 //	    				+'<label class="control-label text-warning ml-2">追加数の番号を入れて下さい！</label>'
 //	    		);
 //	    	}
-	    });
-	});
-});
+	    });*/

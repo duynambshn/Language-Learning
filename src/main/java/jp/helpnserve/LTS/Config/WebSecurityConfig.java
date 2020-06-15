@@ -29,6 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// セキュリティ設定を無視するリクエスト設定
 		// 静的リソース(images、css、javascript)に対するアクセスはセキュリティ設定を無視する
 		web.ignoring().antMatchers("/css/**", "/js/**", "/webjars/**");
+		web.ignoring().antMatchers("/uploadDir/**");
 	}
 
 	@Override
