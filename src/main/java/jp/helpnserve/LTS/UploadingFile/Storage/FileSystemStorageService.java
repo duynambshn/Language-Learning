@@ -1,5 +1,13 @@
 package jp.helpnserve.LTS.UploadingFile.Storage;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -7,12 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.stream.Stream;
+import jp.helpnserve.LTS.Model.Sound;
 
 @Service
 public class FileSystemStorageService implements StorageService {
@@ -25,12 +28,13 @@ public class FileSystemStorageService implements StorageService {
 	}
 
 	@Override
-	public void store(MultipartFile file) {
+	public void store(MultipartFile file, String soundId) {
 		try {
 			if (file.isEmpty()) {
 				throw new StorageException("Failed to store empty file " + file.getOriginalFilename());
 			}
-			Files.copy(file.getInputStream(), this.rootLocation.resolve(file.getOriginalFilename()));
+			createDir(soundId);
+			Files.copy(file.getInputStream(), this.rootLocation.resolve(soundId).resolve(file.getOriginalFilename()));
 		} catch (IOException e) {
 			throw new StorageException("Failed to store file " + file.getOriginalFilename(), e);
 		}
@@ -39,8 +43,7 @@ public class FileSystemStorageService implements StorageService {
 	@Override
 	public Stream<Path> loadAll() {
 		try {
-			return Files.walk(this.rootLocation, 1)
-					.filter(path -> !path.equals(this.rootLocation))
+			return Files.walk(this.rootLocation, 1).filter(path -> !path.equals(this.rootLocation))
 					.map(path -> this.rootLocation.relativize(path));
 		} catch (IOException e) {
 			throw new StorageException("Failed to read stored files", e);
@@ -58,10 +61,9 @@ public class FileSystemStorageService implements StorageService {
 		try {
 			Path file = load(filename);
 			Resource resource = new UrlResource(file.toUri());
-			if(resource.exists() || resource.isReadable()) {
+			if (resource.exists() || resource.isReadable()) {
 				return resource;
-			}
-			else {
+			} else {
 				throw new StorageFileNotFoundException("Could not read file: " + filename);
 
 			}
@@ -82,5 +84,20 @@ public class FileSystemStorageService implements StorageService {
 		} catch (IOException e) {
 			throw new StorageException("Could not initialize storage", e);
 		}
+	}
+
+	public void createDir(String soundId) {
+		File TEMP_DIRECTORY = new File(System.getProperty("user.dir"));
+
+		File newDirectory = new File(TEMP_DIRECTORY, this.rootLocation.toString() + "\\" + soundId);
+		newDirectory.mkdir();
+	}
+
+	@Override
+	public void deleteDir(Sound oldSound) {
+		File TEMP_DIRECTORY = new File(System.getProperty("user.dir"));
+
+		File destination = new File(TEMP_DIRECTORY, this.rootLocation.toString() + "\\" + oldSound.getId());
+		FileSystemUtils.deleteRecursively(destination);
 	}
 }

@@ -7,6 +7,8 @@
 	rel="stylesheet">
 <link th:href="@{/css/dataTables.bootstrap4.min.css}" rel="stylesheet">
 <link th:href="@{/css/custom.css}" rel="stylesheet">
+<script
+	th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
 </head>
 <body class="bg-light">
 	<div class="container shadow-sm p-3 mb-5 bg-white rounded">
@@ -30,7 +32,7 @@
 			</button>
 		</div>
 
-		<form th:action="@{/content-update}" th:object="${sentence}"
+		<form th:action="@{/content-update}" th:object="${sentence}" enctype="multipart/form-data"
 			method="post" id="formReg">
 			<div class="static_reg">
 				<div class="topic_border">
@@ -53,11 +55,19 @@
 						th:field="*{explanation}" type="text" class="col-8 form-control" />
 				</div>
 				<div class="ml-2 form-group row">
-					<label class="col-3 control-label">録音</label> <input type="button"
+					<label class="col-3 control-label">録音</label>
+					<div class="custom-file">
+						<input type="file" class="custom-file-input" id="customFile"
+							name="file" accept="audio/*"> <label
+							class="custom-file-label" for="customFile"
+							th:text="${sentence.sound?.soundURL}">Choose file</label>
+					</div>
+
+					<!-- <input type="button"
 						name="btnRecord1" value="録音" class="col-2 form-control" /> <input
 						type="button" name="btnReRecord1" value="再録音"
 						class="ml-2 col-2 form-control" /> <input type="button"
-						name="btnPlay1" value="再生" class="ml-2 col-2 form-control" />
+						name="btnPlay1" value="再生" class="ml-2 col-2 form-control" /> -->
 				</div>
 			</div>
 			<div class="col-12 form-group">
@@ -66,13 +76,17 @@
 					type="submit" value="編集" name="btnRegister"
 					class="ml-2 btn btn-success float-right" />
 			</div>
-			<!-- <div class="col-12 static_btn form-group row">
-	       		<label class="col-3 control-label font-weight-bold mr-2">追加数</label>
-	       		<input type="text" name="txtNumber" id="txt_number" class="ml-2 col-2 form-control"/>
-	       		<button type="button" name="btnPlus" id="btn_plus" class="ml-2 btn btn-secondary">&#43;</button>
-	       	</div> -->
 		</form>
 
 	</div>
+	<script>
+		$(".custom-file-input").on(
+				"change",
+				function() {
+					var fileName = $(this).val().split("\\").pop();
+					$(this).siblings(".custom-file-label").addClass("selected")
+							.html(fileName);
+				});
+	</script>
 </body>
 </html>

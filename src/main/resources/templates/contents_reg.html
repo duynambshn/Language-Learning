@@ -7,6 +7,8 @@
 	rel="stylesheet">
 <link th:href="@{css/dataTables.bootstrap4.min.css}" rel="stylesheet">
 <link th:href="@{css/custom.css}" rel="stylesheet">
+<script
+	th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
 </head>
 <body class="bg-light">
 	<div class="container shadow-sm p-3 mb-5 bg-white rounded">
@@ -31,7 +33,7 @@
 		</div>
 
 		<form th:action="@{/content-reg}" th:object="${sentence}"
-			method="post" id="formReg">
+			enctype="multipart/form-data" method="post" id="formReg">
 			<div class="static_reg">
 				<div class="topic_border">
 					<label class="lbl_topic col-12 control-label font-weight-bold">辞典</label>
@@ -50,15 +52,22 @@
 				</div>
 				<div class="ml-2 form-group row">
 					<label class="col-3 control-label">Explanation</label> <input
-						th:field="*{explanation}" type="text"
-						class="col-8 form-control" />
+						th:field="*{explanation}" type="text" class="col-8 form-control" />
 				</div>
 				<div class="ml-2 form-group row">
-					<label class="col-3 control-label">録音</label> <input type="button"
+					<label class="col-3 control-label">録音</label>
+					<div class="custom-file">
+						<input type="file" class="custom-file-input" id="customFile"
+							name="file" accept="audio/*"> <label
+							class="custom-file-label" for="customFile">Choose file</label>
+					</div>
+
+					<!--  <input type="button"
 						name="btnRecord1" value="録音" class="col-2 form-control" /> <input
 						type="button" name="btnReRecord1" value="再録音"
 						class="ml-2 col-2 form-control" /> <input type="button"
-						name="btnPlay1" value="再生" class="ml-2 col-2 form-control" />
+						name="btnPlay1" value="再生" class="ml-2 col-2 form-control" /> -->
+
 				</div>
 			</div>
 			<div class="col-12 form-group">
@@ -67,18 +76,18 @@
 					type="submit" value="登録する" name="btnRegister"
 					class="ml-2 btn btn-success float-right" />
 			</div>
-			<!-- <div class="col-12 static_btn form-group row">
-	       		<label class="col-3 control-label font-weight-bold mr-2">追加数</label>
-	       		<input type="text" name="txtNumber" id="txt_number" class="ml-2 col-2 form-control"/>
-	       		<button type="button" name="btnPlus" id="btn_plus" class="ml-2 btn btn-secondary">&#43;</button>
-	       	</div> -->
 		</form>
 
 	</div>
-	<!-- <script src="webjars/jquery/3.3.1/jquery.min.js"></script>
-    <script src="js/jquery.dataTables.min.js"></script>
-    <script src="js/dataTables.bootstrap4.min.js"></script>
-    <script src="webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-	<script src="js/custom.js"></script> -->
+
+	<script>
+		$(".custom-file-input").on(
+				"change",
+				function() {
+					var fileName = $(this).val().split("\\").pop();
+					$(this).siblings(".custom-file-label").addClass("selected")
+							.html(fileName);
+				});
+	</script>
 </body>
 </html>

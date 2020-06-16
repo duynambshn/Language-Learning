@@ -74,11 +74,12 @@
 						<td th:text="${element.translateSentence}" class="text-center"></td>
 						<td th:text="${element.explanation}" class="text-center"></td>
 
-						<td class="text-center"><a th:href="@{/contents-edit/} + ${element.id}"
+						<td class="text-center"><a
+							th:href="@{/contents-edit/} + ${element.id}"
 							class="btn btn-primary btn-sm">訂正</a>
-							<button th:href="@{/contents-del/} + ${element.id}"
-								class="btn btn-danger btn-sm">削除</button> <a href="/"
-							class="btn btn-success btn-sm">公開</a></td>
+							<button th:href="@{/content-del/} + ${element.id}"
+								class="btn btn-danger btn-sm" id="del" onClick="delElement()">削除</button>
+							<a href="/" class="btn btn-success btn-sm">公開</a></td>
 
 					</tr>
 				</th:block>
@@ -105,6 +106,14 @@
 				}, ]
 			});
 		});
+
+		function delElement() {
+			if (confirm("削除を確認してください！")) {
+				return;
+			} else {
+				event.preventDefault();
+			}
+		};
 	</script>
 </body>
 </html>

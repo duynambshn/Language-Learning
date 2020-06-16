@@ -19,7 +19,7 @@ public class IndexController {
 	@Autowired
 	private SentenceRepository sentenceRepository;
 
-	@GetMapping(value = "/")
+	@GetMapping(value = "/index")
 	public ModelAndView index(ModelAndView mav) {
 		mav.setViewName("index"); // 表示メッセージ
 		return mav;
@@ -52,8 +52,8 @@ public class IndexController {
 
 	@RequestMapping(value = "/contents-edit/{id}", method = RequestMethod.GET)
 	public String contentsEditForm(@PathVariable(name = "id") String id, Model model) {
-		model.addAttribute("sentence", sentenceRepository.findById(Integer.parseInt(id)));
-		return "contents_play";
+		model.addAttribute("sentence", sentenceRepository.findById(Integer.parseInt(id)).get());
+		return "contents_edit";
 	}
 
 	@GetMapping(value = "/contents-play")

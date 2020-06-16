@@ -6,11 +6,13 @@ import java.util.stream.Stream;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
+import jp.helpnserve.LTS.Model.Sound;
+
 public interface StorageService {
 
 	void init();
 
-	void store(MultipartFile file);
+	void store(MultipartFile file, String soundId);
 
 	Stream<Path> loadAll();
 
@@ -19,5 +21,7 @@ public interface StorageService {
 	Resource loadAsResource(String filename);
 
 	void deleteAll();
+
+	void deleteDir(Sound sound);
 
 }
