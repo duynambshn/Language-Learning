@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -23,6 +24,12 @@ public class MainController {
 
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+	@RequestMapping({ "/", "/home" })
+	public String home() {
+
+		return "mainPage";
+	}
 
 	@GetMapping(path = "/add/{name}/{password}/{email}") // Map ONLY POST Requests
 	public @ResponseBody String addNewUser(@PathVariable String name, @PathVariable String password,

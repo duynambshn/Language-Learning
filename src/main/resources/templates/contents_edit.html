@@ -32,8 +32,8 @@
 			</button>
 		</div>
 
-		<form th:action="@{/content-update}" th:object="${sentence}" enctype="multipart/form-data"
-			method="post" id="formReg">
+		<form th:action="@{/content-update}" th:object="${sentence}"
+			enctype="multipart/form-data" method="post" id="formReg">
 			<div class="static_reg">
 				<div class="topic_border">
 					<label class="lbl_topic col-12 control-label font-weight-bold">辞典</label>
@@ -62,12 +62,6 @@
 							class="custom-file-label" for="customFile"
 							th:text="${sentence.sound?.soundURL}">Choose file</label>
 					</div>
-
-					<!-- <input type="button"
-						name="btnRecord1" value="録音" class="col-2 form-control" /> <input
-						type="button" name="btnReRecord1" value="再録音"
-						class="ml-2 col-2 form-control" /> <input type="button"
-						name="btnPlay1" value="再生" class="ml-2 col-2 form-control" /> -->
 				</div>
 			</div>
 			<div class="col-12 form-group">
@@ -87,6 +81,10 @@
 					$(this).siblings(".custom-file-label").addClass("selected")
 							.html(fileName);
 				});
+
+		function backPage() {
+			history.back();
+		}
 	</script>
 </body>
 </html>

@@ -22,19 +22,10 @@
 		<div class="form-group row">
 			<div class="col-12">
 				<form action="/" method="post" id="formSearch">
-					<div class="ml-2 form-group row">
-						<label class="col-3 control-label">暗記語文（English）</label> <input
-							type="text" name="txtEng" class="col-8 form-control" />
-					</div>
-					<div class="ml-2 form-group row">
-						<label class="col-3 control-label">翻訳語文（Japanese）</label> <input
-							type="text" name="txtJpn" class="col-8 form-control" />
-					</div>
-					<div class="col-12 form-group" style="text-align: right;">
-						<input type="submit" value="検索" name="btnEdit"
-							class="ml-2 btn btn-primary" /> <input type="reset" value="クリア"
-							name="btnClear" class="btn btn-light ml-2" /> <a
+					
+					<div class="col-12 form-group" style="text-align: right;"><a
 							href="/contents-reg" class="btn btn-secondary ml-2 ">追加</a>
+							<a th:href="@{/}" class="btn btn-danger float-right ml-2">キャンセル</a>
 					</div>
 				</form>
 			</div>
@@ -76,10 +67,9 @@
 
 						<td class="text-center"><a
 							th:href="@{/contents-edit/} + ${element.id}"
-							class="btn btn-primary btn-sm">訂正</a>
-							<button th:href="@{/content-del/} + ${element.id}"
-								class="btn btn-danger btn-sm" id="del" onClick="delElement()">削除</button>
-							<a href="/" class="btn btn-success btn-sm">公開</a></td>
+							class="btn btn-primary btn-sm">訂正</a> <a
+							th:href="@{/contents-delete/} + ${element.id}"
+							class="btn btn-danger btn-sm" id="del" onClick="delElement()">削除</a>
 
 					</tr>
 				</th:block>
@@ -88,6 +78,8 @@
 		<div class="form-group row mt-3">
 			<div class="col-sm-12"></div>
 		</div>
+
+		<br>
 	</div>
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -106,14 +98,6 @@
 				}, ]
 			});
 		});
-
-		function delElement() {
-			if (confirm("削除を確認してください！")) {
-				return;
-			} else {
-				event.preventDefault();
-			}
-		};
 	</script>
 </body>
 </html>

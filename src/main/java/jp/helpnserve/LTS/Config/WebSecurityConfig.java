@@ -36,26 +36,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.rememberMe().key("uniqueAndSecret").tokenValiditySeconds(1296000);
 
-//		http.authorizeRequests().antMatchers("/", "/home", "/signup", "/*/*/*/*", "/all").permitAll().anyRequest()
-//				.authenticated().and().formLogin().loginPage("/login").permitAll().and().logout().permitAll();
+		http.authorizeRequests().antMatchers("/signup", "/*/*/*/*", "/all").permitAll().anyRequest().authenticated()
+				.and().formLogin().defaultSuccessUrl("/home", true) // default success page
+				.loginPage("/login").permitAll().and().logout().logoutUrl("/j_spring_security_logout").permitAll();
 	}
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
 	}
-
-//	@Bean
-//	@Override
-//	public UserDetailsService userDetailsService() {
-//		@SuppressWarnings("deprecation")
-//		UserDetails user =
-//			 User.withDefaultPasswordEncoder()
-//				.username("user")
-//				.password("password")
-//				.roles("USER")
-//				.build();
-//
-//		return new InMemoryUserDetailsManager(user);
-//	}
 }

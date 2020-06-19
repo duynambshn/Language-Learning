@@ -32,43 +32,43 @@
 			</button>
 		</div>
 
-		<form th:action="@{/content-update}" th:object="${sentence}"
-			enctype="multipart/form-data" method="post" id="formReg">
-			<div class="static_reg">
-				<div class="topic_border">
-					<label class="lbl_topic col-12 control-label font-weight-bold">辞典</label>
-				</div>
+		<form th:action="@{/content-delete}" th:object="${sentence}"
+			onSubmit="return confirm('削除を確認してください！');" method="post">
 
-				<input type="hidden" th:field="*{id}">
-				<div class="ml-2 form-group row">
-					<label class="col-3 control-label">暗記語文（English）</label> <input
-						th:field="*{originSentence}" type="text" name="txtEng1"
-						class="col-8 form-control" />
-				</div>
-				<div class="ml-2 form-group row">
-					<label class="col-3 control-label">翻訳語文（Japanese）</label> <input
-						th:field="*{translateSentence}" type="text" name="txtJpn1"
-						class="col-8 form-control" />
-				</div>
-				<div class="ml-2 form-group row">
-					<label class="col-3 control-label">Explanation</label> <input
-						th:field="*{explanation}" type="text" class="col-8 form-control" />
-				</div>
-				<div class="ml-2 form-group row">
-					<label class="col-3 control-label">録音</label>
-					<div class="custom-file">
-						<input type="file" class="custom-file-input" id="customFile"
-							name="file" accept="audio/*"> <label
-							class="custom-file-label" for="customFile"
-							th:text="${sentence.sound?.soundURL}">Choose file</label>
-					</div>
+			<div class="topic_border">
+				<label class="lbl_topic col-12 control-label font-weight-bold">辞典</label>
+			</div>
+
+			<input type="hidden" th:field="*{id}">
+			<div class="ml-2 form-group row">
+				<label class="col-3 control-label">暗記語文（English）</label> <input
+					th:field="*{originSentence}" type="text" name="txtEng1"
+					class="col-8 form-control" disabled />
+			</div>
+			<div class="ml-2 form-group row">
+				<label class="col-3 control-label">翻訳語文（Japanese）</label> <input
+					th:field="*{translateSentence}" type="text" name="txtJpn1"
+					class="col-8 form-control" disabled />
+			</div>
+			<div class="ml-2 form-group row">
+				<label class="col-3 control-label">Explanation</label> <input
+					th:field="*{explanation}" type="text" class="col-8 form-control"
+					disabled />
+			</div>
+			<div class="ml-2 form-group row">
+				<label class="col-3 control-label">録音</label>
+				<div class="custom-file">
+					<input type="file" class="custom-file-input" id="customFile"
+						name="file" accept="audio/*" disabled> <label
+						class="custom-file-label" for="customFile"
+						th:text="${sentence.sound?.soundURL}">Choose file</label>
 				</div>
 			</div>
 			<div class="col-12 form-group">
 				<a th:href="@{/contents-list}"
-					class="btn btn-danger float-right ml-2">キャンセル</a> <input
-					type="submit" value="編集" name="btnRegister"
-					class="ml-2 btn btn-success float-right" />
+					class="btn btn-success float-right ml-2">戻る</a> <input
+					type="submit" value="削除" name="btnRegister"
+					class="ml-2 btn btn-danger float-right" />
 			</div>
 		</form>
 
@@ -81,10 +81,6 @@
 					$(this).siblings(".custom-file-label").addClass("selected")
 							.html(fileName);
 				});
-
-		function backPage() {
-			history.back();
-		}
 	</script>
 </body>
 </html>

@@ -1,5 +1,7 @@
 package jp.helpnserve.LTS.Repository;
 
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,5 +24,11 @@ public interface SentenceRepository extends JpaRepository<Sentence, Integer> {
 	@Modifying(clearAutomatically = true)
 	@Query("DELETE FROM Sentence u WHERE u.id = :id")
 	public int deleteSentence(@Param("id") int id);
+
+	@Query(value = "SELECT u.id FROM Sentence u WHERE u.id > :id ORDER BY u.id LIMIT 1", nativeQuery = true)
+	public Optional<Integer> getNextId(@Param("id") int id);
+
+	@Query(value = "SELECT u.id FROM Sentence u WHERE u.id < :id ORDER BY u.id desc LIMIT 1", nativeQuery = true)
+	public Optional<Integer> getPrevId(@Param("id") int id);
 
 }
