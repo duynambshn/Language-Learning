@@ -26,9 +26,9 @@
 						</div>
 					</div>
 					<div class="card-body">
-						<form th:action="@{/login}" method="post">
+						<form th:action="@{/j_spring_security_login}" method="post">
 							<div class="form-group">
-								<label class="small mb-1" for="input-username">Email</label> <input
+								<label class="small mb-1" for="input-username">Username</label> <input
 									class="form-control py-4" id="input-username" type="text"
 									name="username" placeholder="Enter username">
 							</div>
@@ -55,14 +55,14 @@
 								value="${_csrf.token}" />
 						</form>
 					</div>
-					<div class="card-footer text-center">
+					<!-- <div class="card-footer text-center">
 						<div class="small">
-							<a href="/signup">Need an account? Sign up!</a>
+							<a th:href="@{/signup}">Need an account? Sign up!</a>
 							<p>
-								<a href="/">back to home page</a>
+								<a th:href="@{/}">back to home page</a>
 							</p>
 						</div>
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</div>

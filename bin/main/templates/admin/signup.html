@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>HELP Language Trainer SignUp V1.1</title>
+<link th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}"
+	rel="stylesheet">
+</head>
+<body>
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-lg-7">
+				<div class="card shadow-lg border-0 rounded-lg mt-5">
+					<div class="card-header">
+						<h3 class="text-center font-weight-light my-4">HELP Language
+							Trainer Login</h3>
+					</div>
+					<div class="text-white text-center" th:if="${success}">
+						<p class="bg-success pb-1 pt-1"
+							style="border-radius: 3px; max-width: 20rem; margin: auto;"
+							th:text="${success}"></p>
+					</div>
+					<div class="text-white text-center" th:if="${error}">
+						<p class="bg-danger pb-1 pt-1"
+							style="border-radius: 3px; max-width: 20rem; margin: auto;"
+							th:text="${error}"></p>
+					</div>
+					<div class="card-body">
+						<form action="#" th:action="@{/admin/signup}" th:object="${user}"
+							method="post">
+							<div class="form-group">
+								<label class="small mb-1" for="inputUserID">User ID</label> <input
+									class="form-control py-4" id="inputUserID" type="text"
+									th:field="*{name}" placeholder="Enter User ID"
+									required="required">
+							</div>
+							<div class="form-group">
+								<label class="small mb-1" for="inputEmailAddress">Email</label>
+								<input class="form-control py-4" id="inputEmailAddress"
+									type="email" th:field="*{email}" aria-describedby="emailHelp"
+									placeholder="Enter email address" required="required">
+							</div>
+							<div class="form-row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label class="small mb-1" for="inputPassword">Password</label>
+										<input class="form-control py-4" id="inputPassword"
+											type="password" th:field="*{password}"
+											placeholder="Enter password" required="required">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label class="small mb-1" for="inputConfirmPassword">Confirm
+											Password</label> <input class="form-control py-4"
+											id="inputConfirmPassword" type="password"
+											placeholder="Confirm password" required="required">
+									</div>
+								</div>
+							</div>
+							<div class="form-check">
+								<input type="checkbox" class="form-check-input" name="chk_mod"> <label
+									for="chk_mod" class="form-check-label">MODERATOR</label>
+							</div>
+							<div class="form-row">
+								<div class="col-md-6">
+									<div class="form-group mt-4 mb-0">
+										<input class="btn btn-primary btn-block" type="submit"
+											value="SignUp" />
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group mt-4 mb-0">
+										<input class="btn btn-light btn-block" type="reset"
+											value="Reset" />
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="card-footer text-center">
+						<div class="small">
+							<p>
+								<a th:href="@{/}">back to home page</a>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

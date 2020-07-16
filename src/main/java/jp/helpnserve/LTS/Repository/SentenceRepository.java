@@ -1,5 +1,6 @@
 package jp.helpnserve.LTS.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -25,10 +26,25 @@ public interface SentenceRepository extends JpaRepository<Sentence, Integer> {
 	@Query("DELETE FROM Sentence u WHERE u.id = :id")
 	public int deleteSentence(@Param("id") int id);
 
-	@Query(value = "SELECT u.id FROM Sentence u WHERE u.id > :id ORDER BY u.id LIMIT 1", nativeQuery = true)
+	@Query(value = "SELECT u.id FROM sentence u WHERE u.id > :id ORDER BY u.id LIMIT 1", nativeQuery = true)
 	public Optional<Integer> getNextId(@Param("id") int id);
 
-	@Query(value = "SELECT u.id FROM Sentence u WHERE u.id < :id ORDER BY u.id desc LIMIT 1", nativeQuery = true)
+	@Query(value = "SELECT * FROM sentence u WHERE u.id > :id ORDER BY u.id LIMIT 1", nativeQuery = true)
+	public Optional<Sentence> getNextSentence(@Param("id") int id);
+
+	@Query(value = "SELECT u.id FROM sentence u WHERE u.id < :id ORDER BY u.id desc LIMIT 1", nativeQuery = true)
 	public Optional<Integer> getPrevId(@Param("id") int id);
+
+	@Query(value = "FROM Sentence u LEFT JOIN u.listUserInfo e WITH e.userId = :userId")
+	public List<Sentence> getFilterByUserId(@Param("userId") int userId);
+
+	@Query(value = "SELECT u.* FROM sentence u ORDER BY u.id ASC LIMIT 1", nativeQuery = true)
+	public Optional<Sentence> getFirstSentence();
+
+	@Query(value = "SELECT u.* FROM sentence u ORDER BY u.id DESC LIMIT 1", nativeQuery = true)
+	public Optional<Sentence> getLastSentence();
+
+	@Query(value = "SELECT sen.id FROM sentence sen WHERE sen.id > (SELECT max(info.sentence_id) FROM user_info info WHERE info.user_id = :userId) ORDER BY sen.id LIMIT 1", nativeQuery = true)
+	public Optional<Integer> getNextIdWithUserId(@Param("userId") int userId);
 
 }

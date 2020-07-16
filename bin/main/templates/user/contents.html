@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>HELP Language trainer Contents Dictionary set V1.1</title>
+	<link th:href="@{https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css}" rel="stylesheet">
+	<link th:href="@{https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css}" rel="stylesheet">
+
+	<script th:src="@{https://code.jquery.com/jquery-3.5.1.js}"></script>
+	<script th:src="@{https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js}"></script>
+	<script th:src="@{https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js}"></script>
+
+	<!-- default header name is X-CSRF-TOKEN -->
+	<meta name="_csrf" th:content="${_csrf.token}" />
+	<meta name="_csrf_header" th:content="${_csrf.headerName}" />
+
+	<style>
+		.goodClass {
+			background-color: #00FA9A;
+		}
+
+		.notGoodClass {
+			background-color: #FAFAD2;
+		}
+
+		.select {
+			background-color: #B0E0E6;
+		}
+
+		.notRead {
+			background-color: #A9A9A9;
+		}
+	</style>
+</head>
+
+<body class="bg-light">
+	<div class="container shadow-sm p-3 mb-5 bg-white rounded">
+		<h4 class="breadcrumb mt-3 mb-3">コンテンツ一覧</h4>
+		<div class="form-group row">
+			<div class="col-12">
+				<div class="ml-2 form-group row">
+					<label class="col-3 control-label">語文ID</label> <input type="text" id="txtSearchId" name="txtId"
+						class="col-8 form-control" />
+				</div>
+			</div>
+		</div>
+		<table id="example" class="table table-bordered" style="width: 100%">
+			<thead>
+				<tr class="tbl-header" role="row">
+					<th class="no-sorting text-center" style="width: 5%;">ID</th>
+					<th class="no-sorting text-center" style="width: 25%;">暗記語文（English）</th>
+					<th class="no-sorting text-center" style="width: 25%;">翻訳語文（Japanese）</th>
+					<th class="no-sorting text-center" style="width: 25%;">Explanation</th>
+					<th class="no-sorting text-center" tabindex="0" style="width: 15%;">Date</th>
+					<th id="no-sorting" class="text-center" style="width: 5%;">作業</th>
+				</tr>
+			</thead>
+			<tbody>
+				<th:block th:each="element, elementStat : ${listSentence}">
+					<th:block th:if="${#sets.isEmpty(element.listUserInfo)}">
+						<tr>
+					</th:block>
+					<th:block th:unless="${#sets.isEmpty(element.listUserInfo)}">
+						<th:block th:switch="${element.listUserInfo[0].status}">
+							<tr th:case="0" class="notGoodClass">
+							<tr th:case="1" class="goodClass">
+							<tr th:case="2" class="select">
+							<tr th:case="3" class="notRead">
+							<tr th:case="*">
+						</th:block>
+					</th:block>
+
+					<td th:text="${element.id}" class="text-center" id="colId"></td>
+
+					<td th:text="${element.originSentence}" class="text-center"></td>
+					<td th:text="${element.translateSentence}" class="text-center"></td>
+					<td th:text="${element.explanation}" class="text-center"></td>
+					<td
+						th:text="${not #sets.isEmpty(element.listUserInfo) ? 
+							#dates.format(element.listUserInfo[0].lastTime, 'yyyy/MM/dd HH:mm:ss') : ''}"
+						class="text-center"></td>
+
+					<td class="text-center"><button type="button" href="#"
+						th:onclick="'btnChooseClick(' + ${element.id} + ')'"
+						class="btn btn-primary btn-sm">選択</a>
+					</tr>
+				</th:block>
+			</tbody>
+		</table>
+		<div class="form-group row mt-3">
+			<div class="col-sm-12"></div>
+		</div>
+
+
+		<!--  -->
+		<form action="#" id="player" th:object="${sentence}" method="post">
+
+			<div class="topic_border">
+				<label class="lbl_topic col-12 control-label font-weight-bold" style="background-color: burlywood;">辞典</label>
+			</div>
+
+			<div class="ml-2 form-group row">
+				<label class="col-3 control-label">ID</label> <input
+					th:field="*{id}" type="text" id="txtId" class="col-8 form-control"
+					disabled />
+			</div>
+
+			<div class="ml-2 form-group row">
+				<label class="col-3 control-label">暗記語文（English）</label> <input
+					th:field="*{originSentence}" type="text" id="txtEng"
+					class="col-8 form-control" disabled />
+			</div>
+			<div class="ml-2 form-group row">
+				<label class="col-3 control-label">翻訳語文（Japanese）</label> <input
+					th:field="*{translateSentence}" type="text" id="txtJpn"
+					class="col-8 form-control" disabled />
+			</div>
+			<div class="ml-2 form-group row">
+				<label class="col-3 control-label">Explanation</label> <input
+					th:field="*{explanation}" type="text" id="txtExp"
+					class="col-8 form-control" disabled />
+			</div>
+			<div class="ml-2 form-group row">
+				<label class="col-3 control-label">録音</label>
+				<audio id="audio" controls="controls">
+					<source
+						th:src="${@environment.getProperty('server.servlet.context-path') + sentence.sound?.soundURL}"
+						type="audio/mpeg" id="txtSound">
+				</audio>
+			</div>
+			<div class="col-12 form-group">
+				<a th:href="@{/}" class="btn btn-danger float-right ml-2">戻る</a>
+
+				<button type="button" class="btn btn-success float-right ml-2"
+					th:onclick="btnOnClick('1')">GO</button>
+				<button type="button" class="btn btn-warning float-right ml-2"
+					th:onclick="btnOnClick('0')">NGO</button>
+			</div>
+		</form>
+	</div>
+	<script th:inline="javascript">
+		function filterColumn(i) {
+			$('#example').DataTable().column(0).search(i, true, false).draw();
+		}
+
+		$(document).ready(function () {
+			var table = $('#example').DataTable({
+				//"ordering": false;
+				"columns": [{
+					"orderable": false
+				}, {
+					"orderable": false
+				}, {
+					"orderable": false
+				}, {
+					"orderable": false
+				}, {
+					"orderable": false
+				}, {
+					"orderable": false
+				},],
+				//"searching" : false,
+				"lengthChange": false,
+				"pageLength": 5,
+				"dom": 'lrtip'
+			});
+
+			//
+			$('#txtSearchId').on('keyup', function () {
+				filterColumn($(this).val())
+			});
+
+			//
+
+		});
+
+		var path = [[${@environment.getProperty('server.servlet.context-path')
+		}]];
+
+		//*********************
+		//
+		//
+		//*********************
+		function btnChooseClick(id) {
+
+			var input = {}
+			input["id"] = id.toString();
+			input["status"] = "3";
+			input["prevId"] = $("#txtId").val();
+
+			ajaxPath = path + "/user/api/select-sen";
+			createAjax(input, ajaxPath);
+
+		}
+
+		//*********************
+		//
+		//
+		//*********************
+		function btnOnClick(status) {
+
+			var input = {}
+			input["id"] = $("#txtId").val();
+			input["status"] = status;
+
+			ajaxPath = path + "/user/api/next-sen";
+			createAjax(input, ajaxPath);
+		}
+
+		//*********************
+		//
+		//
+		//*********************
+		function createAjax(input, ajaxPath) {
+
+			$("button").prop("disabled", true);
+
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function (e, xhr, options) {
+				xhr.setRequestHeader(header, token);
+			});
+
+			$.ajax({
+				type: "PUT",
+				contentType: "application/json",
+				url: ajaxPath,
+				data: JSON.stringify(input),
+				dataType: 'json',
+				cache: false,
+				timeout: 600000,
+				success: function (data) {
+
+					if (data["msg"] === "no result") {
+						alert("You had compeleted the lession!");
+
+						var table = $('#example').DataTable();
+						var indexes = table.rows().eq(0).filter(function (rowIdx) {
+							if (table.cell(rowIdx, 0).data() === input["id"]) {
+								return true;
+							}
+							return false;
+						});
+
+						table.rows(indexes)
+							.nodes()
+							.to$()
+							.removeClass()
+							.addClass('goodClass');
+
+
+					} else {
+						SetDataFromResult(input, data);
+
+						alert('Sentence has been updated!')
+					}
+				},
+				error: function (e) {
+
+					alert("error!");
+
+				}
+			});
+
+			$("button").prop("disabled", false);
+		}
+
+		//*********************
+		//
+		//
+		//*********************
+		function SetDataFromResult(input, data) {
+			var origin = window.location.origin;
+
+			$("#txtId").val(data["id"].toString());
+			$("#txtEng").val(data["originSentence"]);
+			$("#txtJap").val(data["translateSentence"]);
+			$("#txtExp").val(data["explanation"]);
+			$("#txtSound").attr("src", origin + path + data['soundUrl']);
+			var audio = document.getElementById('audio');
+			audio.load();
+
+			var table = $('#example').DataTable();
+			var date = new Date(Date.parse(data["lastTime"]));
+			var dateString =
+				date.getFullYear() + "/" +
+				("0" + (date.getMonth() + 1)).slice(-2) + "/" +
+				("0" + date.getDate()).slice(-2) + " " +
+				("0" + date.getHours()).slice(-2) + ":" +
+				("0" + date.getMinutes()).slice(-2) + ":" +
+				("0" + date.getSeconds()).slice(-2);
+
+
+			//Update row style
+			var indexes;
+			//Selecting case
+			if (input["status"] === "3") {
+				indexes = table.rows().eq(0).filter(function (rowIdx) {
+					if (table.cell(rowIdx, 0).data() === input["prevId"]) {
+						table.cell(rowIdx, 4).data(dateString);
+						return true;
+					}
+					return false;
+				});
+			}
+			else {
+				indexes = table.rows().eq(0).filter(function (rowIdx) {
+					if (table.cell(rowIdx, 0).data() === input["id"]) {
+						table.cell(rowIdx, 4).data(dateString);
+						return true;
+					}
+					return false;
+				});
+			}
+
+			table.rows(indexes)
+				.nodes()
+				.to$()
+				.removeClass()
+				.addClass(input["status"] === '1' ? 'goodClass' : input["status"] === '0' ? 'notGoodClass' : 'notRead');
+
+			indexes = table.rows().eq(0).filter(function (rowIdx) {
+				if (table.cell(rowIdx, 0).data() === data["id"].toString()) {
+					table.cell(rowIdx, 4).data(dateString);
+					return true;
+				}
+				return false;
+			});
+
+			table.rows(indexes)
+				.nodes()
+				.to$()
+				.removeClass()
+				.addClass('select');
+		}
+
+		//*********************
+		//
+		//
+		//*********************
+		function backPage() {
+			return history.back();
+		}
+	</script>
+</body>
+</html>

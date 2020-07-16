@@ -1,5 +1,8 @@
 package jp.helpnserve.LTS.Model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,11 +12,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.FilterJoinTable;
+
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity // This tells Hibernate to make a table out of this class
 @Table(name = "sentence")
@@ -41,4 +49,10 @@ public class Sentence {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "dictionary_id", nullable = false)
 	private Dictionary dictionary;
+
+	@OneToMany(mappedBy = "sentence", fetch = FetchType.LAZY)
+	@FilterJoinTable(name = "effectiveUserId", condition = "user_id = :userId")
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	private Set<UserInfo> listUserInfo = new HashSet<>();
 }

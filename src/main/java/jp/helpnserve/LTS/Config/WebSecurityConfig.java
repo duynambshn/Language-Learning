@@ -36,13 +36,40 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.rememberMe().key("uniqueAndSecret").tokenValiditySeconds(1296000);
 
-		http.authorizeRequests().antMatchers("/signup", "/*/*/*/*", "/all").permitAll().anyRequest().authenticated()
-				.and().formLogin().defaultSuccessUrl("/home", true) // default success page
-				.loginPage("/login").permitAll().and().logout().logoutUrl("/j_spring_security_logout").permitAll();
+		http //
+				// .csrf().disable() //
+				.authorizeRequests() //
+				.antMatchers("/login").permitAll() // Allow anyone
+				.antMatchers("/user/**").hasRole("USER") // role user
+				.antMatchers("/mod/**").hasRole("MOD") // role moderator
+				.antMatchers("/admin/**").hasRole("ADMIN") // role admin
+				.anyRequest().authenticated() // All remaining URLs resquire that the user be successfully
+				.and() //
+				.formLogin() //
+				.loginPage("/login").permitAll() // set login form
+				.defaultSuccessUrl("/home", true) // default success page
+				.loginProcessingUrl("/j_spring_security_login")//
+				.failureUrl("/login?message=error")//
+				.usernameParameter("username")//
+				.passwordParameter("password")//
+				.and()//
+				.logout().logoutUrl("/j_spring_security_logout").logoutSuccessUrl("/login?message=logout");
 	}
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
 	}
+
+//	@Bean
+//	CorsConfigurationSource corsConfigurationSource() {
+//		CorsConfiguration configuration = new CorsConfiguration();
+//		configuration.setAllowedOrigins(Arrays.asList("*"));
+//		configuration.setAllowedMethods(Arrays.asList("*"));
+//		configuration.setAllowedHeaders(Arrays.asList("*"));
+//		configuration.setAllowCredentials(true);
+//		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//		source.registerCorsConfiguration("/**", configuration);
+//		return source;
+//	}
 }

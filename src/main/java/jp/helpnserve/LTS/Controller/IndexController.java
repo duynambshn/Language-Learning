@@ -11,49 +11,59 @@ import org.springframework.web.servlet.ModelAndView;
 
 import jp.helpnserve.LTS.Model.Sentence;
 import jp.helpnserve.LTS.Repository.SentenceRepository;
+import jp.helpnserve.LTS.Service.GeneralService;
 
 @Controller
 public class IndexController {
 	@Autowired
 	private SentenceRepository sentenceRepository;
+	@Autowired
+	GeneralService generalService;
 
 	@GetMapping(value = "/login")
 	public String login() {
-		return "login";
+
+		return generalService.HasLoginUser() ? "redirect:/home" : "login";
 	}
 
-	@GetMapping(value = "/contents-reg")
+	@GetMapping(value = "/mod/contents-reg")
 	public String contents_reg(Model model) {
 
 		model.addAttribute("sentence", new Sentence());
 
-		return "contents_reg";
+		return "mod/contents_reg";
 	}
 
-	@GetMapping(value = "/contents-list")
+	@GetMapping(value = "/mod/contents-list")
 	public ModelAndView contents_list(ModelAndView mav) {
-		mav.setViewName("contents_list");
+		mav.setViewName("/mod/contents_list");
 		mav.addObject("sentence", sentenceRepository.findAll());
 		return mav;
 	}
 
-	@RequestMapping(value = "/contents-edit/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/mod/contents-edit/{id}", method = RequestMethod.GET)
 	public String contentsEditForm(@PathVariable(name = "id") String id, Model model) {
-		model.addAttribute("sentence", sentenceRepository.findById(Integer.parseInt(id)).get());
-		return "contents_edit";
+
+		Sentence sentence = sentenceRepository.findById(Integer.parseInt(id)).get();
+
+		if (sentence.getSound() != null) {
+			sentence.getSound().setSoundURL(sentence.getSound().getSoundURL().equals("") ? ""
+					: sentence.getSound().getSoundURL().split("/")[3]);
+		}
+
+		model.addAttribute("sentence", sentence);
+		return "/mod/contents_edit";
 	}
 
-	@RequestMapping(value = "/contents-delete/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/mod/contents-delete/{id}", method = RequestMethod.GET)
 	public String handleContentDelete(@PathVariable(name = "id") String id, Model model) {
 		model.addAttribute("sentence", sentenceRepository.findById(Integer.parseInt(id)).get());
-		return "contents_delete";
+		return "mod/contents_delete";
 	}
 
-//	@GetMapping(value = "/contents-play")
-//	public String contents_play(Model model) {
-//
-//		model.addAttribute("sentence", sentenceRepository.findAll());
-//
-//		return "contents_play";
-//	}
+	@RequestMapping(value = "/mod/contents-csv", method = RequestMethod.GET)
+	public String handleContentCSV(String id, Model model) {
+		return "mod/contents_csv";
+	}
+
 }

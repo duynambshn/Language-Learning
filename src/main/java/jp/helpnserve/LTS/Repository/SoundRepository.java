@@ -7,7 +7,7 @@ import jp.helpnserve.LTS.Model.Sound;
 
 public interface SoundRepository extends CrudRepository<Sound, Integer> {
 
-	@Query(value = "Select case when max(id) = null then 1 else max(id) end from sound", nativeQuery = true)
+	@Query(value = "Select case when max(id) is null then 1 else max(id) + 1 end from sound", nativeQuery = true)
 	public int getMaxId();
 
 }

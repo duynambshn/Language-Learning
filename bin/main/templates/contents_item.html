@@ -51,7 +51,8 @@ a.disabled {
 			<div class="ml-2 form-group row">
 				<label class="col-3 control-label">録音</label>
 				<audio controls>
-					<source th:src="${sentence.sound?.soundURL}" type="audio/mpeg">
+					<source th:src="
+					${@environment.getProperty('server.servlet.context-path') + sentence.sound?.soundURL}" type="audio/mpeg">
 				</audio>
 			</div>
 			<div class="col-12 form-group">

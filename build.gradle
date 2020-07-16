@@ -25,17 +25,20 @@ dependencies {
 	}
 	testImplementation 'org.springframework.security:spring-security-test'
 	
+	// https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client
+	compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.6.1'	
+	
 	// https://mvnrepository.com/artifact/org.webjars/bootstrap
 	compile group: 'org.webjars', name: 'bootstrap', version: '4.3.1'
-
-	
-	// https://mvnrepository.com/artifact/org.webjars/bootstrap-datepicker
-	compile group: 'org.webjars', name: 'bootstrap-datepicker', version: '1.9.0'
 	
 	// https://mvnrepository.com/artifact/org.webjars.bower/jquery
 	compile group: 'org.webjars.bower', name: 'jquery', version: '3.3.1'
-
 	
+	// https://mvnrepository.com/artifact/org.apache.commons/commons-csv
+	compile group: 'org.apache.commons', name: 'commons-csv', version: '1.8'
+	
+	// https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity5
+	//compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity5', version: '3.0.4.RELEASE'
 	
 	//lombok
 	compileOnly 'org.projectlombok:lombok:1.18.12'
@@ -43,6 +46,9 @@ dependencies {
 	
 	testCompileOnly 'org.projectlombok:lombok:1.18.12'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+	// https://mvnrepository.com/artifact/org.json/json
+	compile group: 'org.json', name: 'json', version: '20200518'	
 }
 
 test {

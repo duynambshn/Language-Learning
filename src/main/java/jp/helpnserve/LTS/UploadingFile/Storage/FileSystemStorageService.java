@@ -33,8 +33,11 @@ public class FileSystemStorageService implements StorageService {
 			if (file.isEmpty()) {
 				throw new StorageException("Failed to store empty file " + file.getOriginalFilename());
 			}
+
 			createDir(soundId);
+			System.out.println("tao duoc dir");
 			Files.copy(file.getInputStream(), this.rootLocation.resolve(soundId).resolve(file.getOriginalFilename()));
+			System.out.println("tao duoc file");
 		} catch (IOException e) {
 			throw new StorageException("Failed to store file " + file.getOriginalFilename(), e);
 		}
@@ -87,9 +90,10 @@ public class FileSystemStorageService implements StorageService {
 	}
 
 	public void createDir(String soundId) {
-		File TEMP_DIRECTORY = new File(System.getProperty("user.dir"));
+//		File TEMP_DIRECTORY = new File(System.getProperty("user.dir"));
 
-		File newDirectory = new File(TEMP_DIRECTORY, this.rootLocation.toString() + "\\" + soundId);
+//		File newDirectory = new File(TEMP_DIRECTORY, this.rootLocation.toString() + "\\" + soundId);
+		File newDirectory = new File(this.rootLocation.toString() + "/" + soundId);
 		newDirectory.mkdir();
 	}
 

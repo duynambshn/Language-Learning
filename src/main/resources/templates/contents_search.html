@@ -26,14 +26,6 @@
 						<label class="col-3 control-label">語文ID</label> <input type="text"
 							name="txtId" class="col-8 form-control" />
 					</div>
-					<div class="ml-2 form-group row">
-						<label class="col-3 control-label">暗記語文（English）</label> <input
-							type="text" name="txtEng" class="col-8 form-control" />
-					</div>
-					<div class="ml-2 form-group row">
-						<label class="col-3 control-label">翻訳語文（Japanese）</label> <input
-							type="text" name="txtJpn" class="col-8 form-control" />
-					</div>
 					<div class="col-12 form-group" style="text-align: right;">
 						<input type="submit" value="検索" class="ml-2 btn btn-primary" /> <input
 							type="reset" value="クリア" name="btnClear"
@@ -103,11 +95,54 @@
 			<div class="col-sm-12"></div>
 		</div>
 
+		<!-- <form action="" th:object="${sentence}" method="post">
 
+			<div class="topic_border">
+				<label class="lbl_topic col-12 control-label font-weight-bold">辞典</label>
+			</div>
+
+			<input type="hidden" th:field="*{id}">
+			<div class="ml-2 form-group row">
+				<label class="col-3 control-label">暗記語文（English）</label> <input
+					th:field="*{originSentence}" type="text" name="txtEng1"
+					class="col-8 form-control" disabled />
+			</div>
+			<div class="ml-2 form-group row">
+				<label class="col-3 control-label">翻訳語文（Japanese）</label> <input
+					th:field="*{translateSentence}" type="text" name="txtJpn1"
+					class="col-8 form-control" disabled />
+			</div>
+			<div class="ml-2 form-group row">
+				<label class="col-3 control-label">Explanation</label> <input
+					th:field="*{explanation}" type="text" class="col-8 form-control"
+					disabled />
+			</div>
+			<div class="ml-2 form-group row">
+				<label class="col-3 control-label">録音</label>
+				<audio controls>
+					<source
+						th:src="
+					${@environment.getProperty('server.servlet.context-path') + sentence.sound?.soundURL}"
+						type="audio/mpeg">
+				</audio>
+			</div>
+			<div class="col-12 form-group">
+				<a th:href="@{/contents-search-all}" class="btn btn-danger ml-2">検索</a>
+				<a th:href="@{/}" class="btn btn-danger float-right ml-2">戻る</a> <a
+					th:href="@{/contents/} + ${nextId}" th:if="${nextId}"
+					class="btn btn-success float-right ml-2">次</a> <a href="*"
+					th:unless="${nextId}"
+					class="btn btn-success float-right ml-2 disabled">次</a><a
+					th:href="@{/contents/} + ${prevId}" th:if="${prevId}"
+					class="btn btn-success float-right ml-2">前</a><a href="*"
+					th:unless="${prevId}"
+					class="btn btn-success float-right ml-2 disabled">前</a>
+			</div>
+		</form> -->
 	</div>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			$('#example').DataTable({
+			var table = $('#example').DataTable({
 				//"ordering": false;
 				"columns" : [ {
 					"orderable" : false
@@ -120,7 +155,9 @@
 				}, {
 					"orderable" : false
 				}, ],
-				"searching" : false
+				"searching" : false,
+				"lengthChange": false,
+				"pageLength": 5
 			});
 		});
 
