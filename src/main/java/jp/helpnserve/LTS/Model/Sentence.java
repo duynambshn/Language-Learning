@@ -16,8 +16,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.FilterJoinTable;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -51,7 +49,6 @@ public class Sentence {
 	private Dictionary dictionary;
 
 	@OneToMany(mappedBy = "sentence", fetch = FetchType.LAZY)
-	@FilterJoinTable(name = "effectiveUserId", condition = "user_id = :userId")
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	private Set<UserInfo> listUserInfo = new HashSet<>();

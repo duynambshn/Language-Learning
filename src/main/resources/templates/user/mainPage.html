@@ -34,13 +34,20 @@
 					<br>
 
 					<div class="col-12 form-group">
+						<div sec:authorize="hasRole('MOD')">
+							<a th:href="@{/mod/contents-list}"
+								class="btn btn-success float-left ml-2">更新</a>
+						</div>
 
-						<a th:href="@{/mod/contents-list}"
-							class="btn btn-success float-left ml-2">更新</a> <a
-							th:href="@{/admin/signup}"
-							class="btn btn-success float-left ml-2">ユーザー追加</a> <a
-							th:href="@{/user/contents}"
-							class="btn btn-success float-right ml-2">練習</a>
+						<div sec:authorize="hasRole('ADMIN')">
+							<a th:href="@{/admin/signup}"
+								class="btn btn-success float-left ml-2">ユーザー追加</a>
+						</div>
+						
+						<div sec:authorize="hasRole('USER')">
+							<a th:href="@{/user/contents}"
+								class="btn btn-success float-right ml-2">練習</a>
+						</div>
 					</div>
 				</div>
 			</div>

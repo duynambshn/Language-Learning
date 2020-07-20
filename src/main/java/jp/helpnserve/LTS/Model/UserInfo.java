@@ -12,10 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Filter;
-import org.hibernate.annotations.FilterDef;
-import org.hibernate.annotations.Filters;
-import org.hibernate.annotations.ParamDef;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.Data;
@@ -27,8 +23,6 @@ import lombok.ToString;
 @Table(name = "user_info")
 @Data
 @NoArgsConstructor
-@FilterDef(name = "userId", parameters = @ParamDef(name = "userId", type = "integer"))
-@Filters({ @Filter(name = "filterUserId", condition = "userId = :userId") })
 public class UserInfo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

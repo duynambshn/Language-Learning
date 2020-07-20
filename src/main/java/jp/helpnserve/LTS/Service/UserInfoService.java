@@ -29,35 +29,91 @@ public class UserInfoService {
 	 */
 	public UserInfo getNextUserInfo(int userId, int sentenceId) {
 
-		Optional<UserInfo> searchInfo = null;
+//		Optional<UserInfo> searchInfo = null;
 
 		// Find next user info
-		searchInfo = userInfoRepository
-				.findFirstByUserIdAndSentenceIdGreaterThanAndStatusNotOrderBySentenceIdAsc(userId, sentenceId, 1);
-		if (searchInfo.isPresent()) {
-			searchInfo.get().setStatus(2);
-			searchInfo.get().setLastTime(new Timestamp(System.currentTimeMillis()));
-			userInfoRepository.save(searchInfo.get());
-			return searchInfo.get();
-		}
+//		searchInfo = userInfoRepository.
+//				.findFirstByUserIdAndSentenceIdGreaterThanAndStatusNotOrderBySentenceIdAsc(userId, sentenceId, 1);
 
-		// Get next sentence
-		int nextSenId = sentenceService.getNextIdWithUserId(userId);
-		if (nextSenId > 0) {
-			createUserInfo(userId, nextSenId, 2);
-			return userInfoRepository.findFirstByUserIdAndSentenceId(userId, nextSenId).get();
-		}
+//		while (true) {
+//			nextSenId = sentenceService.getNextId(sentenceId);
+//
+//			if (nextSenId >= searchInfo.get().getSentence().getId()) {
+//				checkInfo = userInfoRepository.findFirstByUserIdAndSentenceId(userId, nextSenId);
+//			}
+//			break;
+//		}
+//
+//		if (searchInfo.isPresent()) {
+//			if (nextSenId >= searchInfo.get().getSentence().getId()) {
+//				searchInfo.get().setStatus(2);
+//				searchInfo.get().setLastTime(new Timestamp(System.currentTimeMillis()));
+//				userInfoRepository.save(searchInfo.get());
+//				return searchInfo.get();
+//			} else {
+//				createUserInfo(userId, nextSenId, 2);
+//				return userInfoRepository.findFirstByUserIdAndStatus(userId, 2).get();
+//			}
+//		}
+//
+//		// Get next sentence
+//		nextSenId = sentenceService.getNextIdWithUserId(userId);
+//		if (nextSenId > 0) {
+//			createUserInfo(userId, nextSenId, 2);
+//			return userInfoRepository.findFirstByUserIdAndSentenceId(userId, nextSenId).get();
+//		}
 
 		// NOTGOOD sentence
-		searchInfo = userInfoRepository.findFirstByUserIdAndStatusNotOrderBySentenceIdAsc(userId, 1);
-		if (searchInfo.isPresent()) {
-			searchInfo.get().setStatus(2);
-			searchInfo.get().setLastTime(new Timestamp(System.currentTimeMillis()));
-			userInfoRepository.save(searchInfo.get());
-			return searchInfo.get();
+//		searchInfo = userInfoRepository.findFirstByUserIdAndStatusNotOrderBySentenceIdAsc(userId, 1);
+//		if (searchInfo.isPresent()) {
+//			searchInfo.get().setStatus(2);
+//			searchInfo.get().setLastTime(new Timestamp(System.currentTimeMillis()));
+//			userInfoRepository.save(searchInfo.get());
+//			return searchInfo.get();
+//		}
+
+		// Find next user info
+		int nextSenId = sentenceService.getNextIdWithStatusDiff(userId, sentenceId, 1);
+
+		if (nextSenId > 0) {
+			return getInfoByUserIdAndSentenceId(userId, nextSenId);
+		} else { // max id case
+			nextSenId = sentenceService.getNextIdWithStatusDiff(userId, 0, 1);
+			if (nextSenId > 0) {
+				return getInfoByUserIdAndSentenceId(userId, nextSenId);
+			}
 		}
 
 		return null;
+	}
+
+	/**
+	 * 
+	 * @param userId
+	 * @param sentenceId
+	 * @return
+	 */
+	public UserInfo getInfoByUserIdAndSentenceId(int userId, int sentenceId) {
+		Optional<UserInfo> searchInfo = null;
+		searchInfo = userInfoRepository.findFirstByUserIdAndSentenceId(userId, sentenceId);
+
+		if (searchInfo.isPresent()) {
+			searchInfo.get().setStatus(2);
+			searchInfo.get().setLastTime(new Timestamp(System.currentTimeMillis()));
+			userInfoRepository.save(searchInfo.get());
+
+			return searchInfo.get();
+		} else {
+			UserInfo newUserInfo = new UserInfo();
+
+			newUserInfo.setSentence(sentenceService.getSentence(sentenceId).get());
+			newUserInfo.setUserId(userId);
+			newUserInfo.setStatus(2);
+			newUserInfo.setLastTime(new Timestamp(System.currentTimeMillis()));
+			userInfoRepository.save(newUserInfo);
+
+			return newUserInfo;
+		}
 	}
 
 	/**
@@ -96,12 +152,6 @@ public class UserInfoService {
 	public Optional<UserInfo> getSelectingUserInfoWithUserId(int userId, int status) {
 		return userInfoRepository.findFirstByUserIdAndStatus(userId, status);
 	}
-
-//	public UserInfo getMaxSentenceByUserId(int userId) {
-//		// Find next user info
-//		UserInfo searchInfo = userInfoRepository
-//				.findFirstByUserIdAndSentenceIdGreaterThanAndStatusNotOrderBySentenceIdAsc(userId);
-//	}
 
 	/**
 	 * 

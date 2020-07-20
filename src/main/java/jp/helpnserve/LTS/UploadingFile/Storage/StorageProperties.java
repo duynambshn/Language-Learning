@@ -9,11 +9,10 @@ public class StorageProperties {
 	 * Folder location for storing files
 	 */
 	// windows env
-	private String location = "src\\main\\resources\\resources\\uploadDir"; //
+	// private String location = "src\\main\\resources\\resources\\uploadDir"; //
 
 	// centos evn
-	// private String location =
-	// "/usr/share/tomcat9/webapps/word-training/WEB-INF/classes/resources/uploadDir";
+	private String location = "/usr/share/tomcat9/webapps/word-training/WEB-INF/classes/resources/uploadDir";
 
 	public String getLocation() {
 		return location;

@@ -1,5 +1,13 @@
 package jp.helpnserve.LTS.Controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.OpenOption;
+import java.nio.file.StandardOpenOption;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -8,6 +16,7 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +42,7 @@ import jp.helpnserve.LTS.Model.Sentence;
 import jp.helpnserve.LTS.Model.Sound;
 import jp.helpnserve.LTS.Model.User;
 import jp.helpnserve.LTS.Model.UserInfo;
+import jp.helpnserve.LTS.Model.ViewSentenceInfo;
 import jp.helpnserve.LTS.Repository.AuthorizedRepository;
 import jp.helpnserve.LTS.Repository.DictionaryRepository;
 import jp.helpnserve.LTS.Repository.SentenceRepository;
@@ -41,6 +51,7 @@ import jp.helpnserve.LTS.Repository.UserInfoRepository;
 import jp.helpnserve.LTS.Repository.UserRepository;
 import jp.helpnserve.LTS.Service.CSVHelper;
 import jp.helpnserve.LTS.Service.SentenceService;
+import jp.helpnserve.LTS.Service.SoundService;
 import jp.helpnserve.LTS.Service.UserInfoService;
 import jp.helpnserve.LTS.UploadingFile.FileUploadController;
 
@@ -64,6 +75,8 @@ public class ProcessControl {
 	private UserInfoService userInfoService;
 	@Autowired
 	private SentenceService sentenceService;
+	@Autowired
+	private SoundService soundService;
 
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -124,6 +137,7 @@ public class ProcessControl {
 	 * @param redirectAttribute
 	 * @return
 	 */
+	@Transactional
 	@RequestMapping(value = "/mod/content-reg", method = RequestMethod.POST)
 	public String addNewSentence(@RequestParam("file") Optional<MultipartFile> file,
 			@ModelAttribute("sentence") Sentence sentence, RedirectAttributes redirectAttribute) {
@@ -294,30 +308,6 @@ public class ProcessControl {
 	// ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝USER PATH＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝ //
 	/**
 	 * 
-	 * @return
-	 */
-//	@RequestMapping(value = "/contents", method = RequestMethod.GET)
-//	public String handleGetPrevContent() {
-//		User user = userRepository.findByName(SecurityContextHolder.getContext().getAuthentication().getName());
-//
-//		Optional<UserInfo> userInfo = userInfoRepository.getByUserId(user.getId());
-//
-//		if (userInfo.isEmpty()) {
-//			UserInfo newUserInfo = new UserInfo();
-//
-//			newUserInfo.setUserId(user.getId());
-//			newUserInfo.setPrevId(sentenceRepo.getNextId(0).get());
-//			userInfoRepository.save(newUserInfo);
-//
-//			return "redirect:/contents/" + newUserInfo.getPrevId();
-//		}
-//
-//		// else
-//		return "redirect:/contents/" + userInfo.get().getPrevId();
-//	}
-
-	/**
-	 * 
 	 * @param id
 	 * @param model
 	 * @param request
@@ -364,8 +354,7 @@ public class ProcessControl {
 
 		model.addAttribute("sentence", sentence);
 
-		// List sentence
-		List<Sentence> listSentence = sentenceRepo.getFilterByUserId(user.getId());
+		List<ViewSentenceInfo> listSentence = sentenceService.getAllListToShow(user.getId());
 
 		model.addAttribute("listSentence", listSentence);
 		return "/user/contents";
@@ -400,8 +389,8 @@ public class ProcessControl {
 	 */
 	@RequestMapping(value = "/mod/csv-reg", method = RequestMethod.POST)
 	@Transactional
-	public String addNewSentenceFromCSV(@RequestParam("file") MultipartFile file,
-			RedirectAttributes redirectAttribute) {
+	public String addNewSentenceFromCSV(@RequestParam("csvInput") MultipartFile file,
+			@RequestParam("audioInput") MultipartFile[] audio, RedirectAttributes redirectAttribute) {
 
 		int row = 1;
 
@@ -413,6 +402,7 @@ public class ProcessControl {
 			}
 
 			List<String[]> csvData = csvHelperService.csvToList(file.getInputStream());
+
 			Dictionary dictionary = dictionaryRepo.findById(1).get();
 			Sentence sentence;
 
@@ -427,12 +417,52 @@ public class ProcessControl {
 				sentence.setTranslateSentence(data[2]);
 				sentence.setExplanation(data[3]);
 
+				if (data[4] != "") {
+					Optional<MultipartFile> input = Arrays.stream(audio).filter(x -> x.getOriginalFilename() == data[4])
+							.findFirst();
+
+					if (input.isPresent()) {
+						sentence.setSound(soundService.CreateNewSound(input.get()));
+					}
+				}
+
 				sentenceRepo.save(sentence);
 			}
 
 			redirectAttribute.addFlashAttribute("success", "追加は成功しました。");
 		} catch (Exception e) {
 			redirectAttribute.addFlashAttribute("error", row + "行にエラーが発生しました。");
+		}
+
+		return "redirect:/mod/contents-csv";
+	}
+
+	/**
+	 * 
+	 * @param file
+	 * @param redirectAttribute
+	 * @return
+	 */
+	@RequestMapping(value = "/mod/csv-download", method = RequestMethod.GET)
+	public String createFileCSV(RedirectAttributes redirectAttribute, HttpServletResponse response) {
+		try {
+			// get your file as InputStream
+			ByteArrayInputStream is = csvHelperService.backupToCSV(sentenceRepo.findAll());
+			byte[] buffer = new byte[is.available()];
+			is.read(buffer);
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HHmmss");
+
+			File targetFile = new File("src/main/resources/backup-" + sdf.format(new Date()) + ".csv");
+
+			OpenOption myOptions[] = { StandardOpenOption.WRITE, StandardOpenOption.CREATE,
+					StandardOpenOption.TRUNCATE_EXISTING };
+			Files.write(targetFile.toPath(), buffer, myOptions);
+
+			redirectAttribute.addFlashAttribute("success", "CSVファイルを作成しました。");
+
+		} catch (Exception e) {
+			redirectAttribute.addFlashAttribute("error", "エラーが発生しました。");
 		}
 
 		return "redirect:/mod/contents-csv";

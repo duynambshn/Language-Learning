@@ -24,8 +24,13 @@ import jp.helpnserve.LTS.Model.Sentence;
 @Service
 public class CSVHelper {
 	public static String TYPE = "application/octet-stream";
-	static String[] HEADERs = { "No.", "English", "Japanese", "Comment" };
+	static String[] HEADERs = { "No.", "English", "Japanese", "Comment", "FileName" };
 
+	/**
+	 * 
+	 * @param file
+	 * @return
+	 */
 	public boolean hasCSVFormat(MultipartFile file) {
 
 		if (!TYPE.equals(file.getContentType())) {
@@ -35,6 +40,11 @@ public class CSVHelper {
 		return true;
 	}
 
+	/**
+	 * 
+	 * @param is
+	 * @return
+	 */
 	public List<String[]> csvToList(InputStream is) {
 		try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 				CSVParser csvParser = new CSVParser(fileReader,
@@ -45,8 +55,8 @@ public class CSVHelper {
 			Iterable<CSVRecord> csvRecords = csvParser.getRecords();
 
 			for (CSVRecord csvRecord : csvRecords) {
-				String[] tutorial = new String[] { csvRecord.get("No."), csvRecord.get("English"),
-						csvRecord.get("Japanese"), csvRecord.get("Comment") };
+				String[] tutorial = new String[] { csvRecord.get(HEADERs[0]), csvRecord.get(HEADERs[1]),
+						csvRecord.get(HEADERs[2]), csvRecord.get(HEADERs[3]), csvRecord.get(HEADERs[4]) };
 
 				tutorials.add(tutorial);
 			}
@@ -57,13 +67,23 @@ public class CSVHelper {
 		}
 	}
 
+	/**
+	 * 
+	 * @param listSentence
+	 * @return
+	 */
 	public ByteArrayInputStream backupToCSV(List<Sentence> listSentence) {
 		final CSVFormat format = CSVFormat.DEFAULT.withQuoteMode(QuoteMode.MINIMAL);
 
 		try (ByteArrayOutputStream out = new ByteArrayOutputStream();
 				CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out), format);) {
+			// header
+			List<String> data = Arrays.asList(HEADERs[0], HEADERs[1], HEADERs[2], HEADERs[3]);
+			csvPrinter.printRecord(data);
+
+			// body
 			for (Sentence sentence : listSentence) {
-				List<String> data = Arrays.asList(String.valueOf(sentence.getId()), sentence.getOriginSentence(),
+				data = Arrays.asList(String.valueOf(sentence.getId()), sentence.getOriginSentence(),
 						sentence.getTranslateSentence(), sentence.getExplanation());
 
 				csvPrinter.printRecord(data);

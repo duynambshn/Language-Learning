@@ -47,4 +47,10 @@ public interface SentenceRepository extends JpaRepository<Sentence, Integer> {
 	@Query(value = "SELECT sen.id FROM sentence sen WHERE sen.id > (SELECT max(info.sentence_id) FROM user_info info WHERE info.user_id = :userId) ORDER BY sen.id LIMIT 1", nativeQuery = true)
 	public Optional<Integer> getNextIdWithUserId(@Param("userId") int userId);
 
+	@Query(value = "SELECT IFNULL((SELECT sen.id FROM sentence sen LEFT JOIN user_info info "
+			+ "ON sen.id = info.sentence_id AND info.user_id = :userId "
+			+ "WHERE sen.id > :sentenceId AND (info.status <> :status OR info.status is null) ORDER BY sen.id LIMIT 1), 0)", nativeQuery = true)
+	public int getNextSentenceIdWithStatusDiff(@Param("userId") int userId, @Param("sentenceId") int sentenceId,
+			@Param("status") int status);
+
 }

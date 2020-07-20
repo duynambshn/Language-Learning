@@ -38,7 +38,7 @@ dependencies {
 	compile group: 'org.apache.commons', name: 'commons-csv', version: '1.8'
 	
 	// https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity5
-	//compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity5', version: '3.0.4.RELEASE'
+	compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity5', version: '3.0.4.RELEASE'
 	
 	//lombok
 	compileOnly 'org.projectlombok:lombok:1.18.12'

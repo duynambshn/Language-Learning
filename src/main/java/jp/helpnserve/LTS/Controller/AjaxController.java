@@ -1,5 +1,7 @@
 package jp.helpnserve.LTS.Controller;
 
+import javax.transaction.Transactional;
+
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +35,7 @@ public class AjaxController {
 	@Autowired
 	SentenceService sentenceService;
 
+	@Transactional
 	@RequestMapping(value = "/next-sen", method = RequestMethod.PUT)
 	public ResponseEntity<?> GetSearch(@RequestBody String json) {
 
@@ -69,6 +72,7 @@ public class AjaxController {
 		return ResponseEntity.ok(result);
 	}
 
+	@Transactional
 	@RequestMapping(value = "/select-sen", method = RequestMethod.PUT)
 	public ResponseEntity<?> GetSelect(@RequestBody String json) {
 

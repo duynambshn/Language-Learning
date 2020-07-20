@@ -2,36 +2,42 @@
 <html lang="ja" xmlns:th="https://www.thymeleaf.org">
 
 <head>
-	<meta charset="UTF-8">
-	<title>HELP Language trainer Contents Dictionary set V1.1</title>
-	<link th:href="@{https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css}" rel="stylesheet">
-	<link th:href="@{https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css}" rel="stylesheet">
+<meta charset="UTF-8">
+<title>HELP Language trainer Contents Dictionary set V1.1</title>
+<link
+	th:href="@{https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css}"
+	rel="stylesheet">
+<link
+	th:href="@{https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css}"
+	rel="stylesheet">
 
-	<script th:src="@{https://code.jquery.com/jquery-3.5.1.js}"></script>
-	<script th:src="@{https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js}"></script>
-	<script th:src="@{https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{https://code.jquery.com/jquery-3.5.1.js}"></script>
+<script
+	th:src="@{https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js}"></script>
+<script
+	th:src="@{https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js}"></script>
 
-	<!-- default header name is X-CSRF-TOKEN -->
-	<meta name="_csrf" th:content="${_csrf.token}" />
-	<meta name="_csrf_header" th:content="${_csrf.headerName}" />
+<!-- default header name is X-CSRF-TOKEN -->
+<meta name="_csrf" th:content="${_csrf.token}" />
+<meta name="_csrf_header" th:content="${_csrf.headerName}" />
 
-	<style>
-		.goodClass {
-			background-color: #00FA9A;
-		}
+<style>
+.goodClass {
+	background-color: #00FA9A;
+}
 
-		.notGoodClass {
-			background-color: #FAFAD2;
-		}
+.notGoodClass {
+	background-color: #FAFAD2;
+}
 
-		.select {
-			background-color: #B0E0E6;
-		}
+.select {
+	background-color: #B0E0E6;
+}
 
-		.notRead {
-			background-color: #A9A9A9;
-		}
-	</style>
+.notRead {
+	background-color: #A9A9A9;
+}
+</style>
 </head>
 
 <body class="bg-light">
@@ -40,8 +46,8 @@
 		<div class="form-group row">
 			<div class="col-12">
 				<div class="ml-2 form-group row">
-					<label class="col-3 control-label">語文ID</label> <input type="text" id="txtSearchId" name="txtId"
-						class="col-8 form-control" />
+					<label class="col-3 control-label">語文ID</label> <input type="text"
+						id="txtSearchId" name="txtId" class="col-8 form-control" />
 				</div>
 			</div>
 		</div>
@@ -58,17 +64,13 @@
 			</thead>
 			<tbody>
 				<th:block th:each="element, elementStat : ${listSentence}">
-					<th:block th:if="${#sets.isEmpty(element.listUserInfo)}">
-						<tr>
-					</th:block>
-					<th:block th:unless="${#sets.isEmpty(element.listUserInfo)}">
-						<th:block th:switch="${element.listUserInfo[0].status}">
-							<tr th:case="0" class="notGoodClass">
-							<tr th:case="1" class="goodClass">
-							<tr th:case="2" class="select">
-							<tr th:case="3" class="notRead">
-							<tr th:case="*">
-						</th:block>
+
+					<th:block th:switch="${element.status}">
+						<tr th:case="0" class="notGoodClass">
+						<tr th:case="1" class="goodClass">
+						<tr th:case="2" class="select">
+						<tr th:case="3" class="notRead">
+						<tr th:case="*">
 					</th:block>
 
 					<td th:text="${element.id}" class="text-center" id="colId"></td>
@@ -77,13 +79,13 @@
 					<td th:text="${element.translateSentence}" class="text-center"></td>
 					<td th:text="${element.explanation}" class="text-center"></td>
 					<td
-						th:text="${not #sets.isEmpty(element.listUserInfo) ? 
-							#dates.format(element.listUserInfo[0].lastTime, 'yyyy/MM/dd HH:mm:ss') : ''}"
+						th:text="${not #strings.isEmpty(element.lastTime) ? 
+							#dates.format(element.lastTime, 'yyyy/MM/dd HH:mm:ss') : ''}"
 						class="text-center"></td>
 
-					<td class="text-center"><button type="button" href="#"
-						th:onclick="'btnChooseClick(' + ${element.id} + ')'"
-						class="btn btn-primary btn-sm">選択</a>
+					<td class="text-center"><button type="button"
+							th:onclick="'btnChooseClick(' + ${element.id} + ')'"
+							class="btn btn-primary btn-sm">選択</button>
 					</tr>
 				</th:block>
 			</tbody>
@@ -97,7 +99,8 @@
 		<form action="#" id="player" th:object="${sentence}" method="post">
 
 			<div class="topic_border">
-				<label class="lbl_topic col-12 control-label font-weight-bold" style="background-color: burlywood;">辞典</label>
+				<label class="lbl_topic col-12 control-label font-weight-bold"
+					style="background-color: burlywood;">辞典</label>
 			</div>
 
 			<div class="ml-2 form-group row">
