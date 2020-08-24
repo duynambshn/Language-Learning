@@ -3,12 +3,11 @@ package jp.helpnserve.LTS.Repository;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import jp.helpnserve.LTS.Model.Sentence;
 import jp.helpnserve.LTS.Model.Sound;
@@ -53,4 +52,11 @@ public interface SentenceRepository extends JpaRepository<Sentence, Integer> {
 	public int getNextSentenceIdWithStatusDiff(@Param("userId") int userId, @Param("sentenceId") int sentenceId,
 			@Param("status") int status);
 
+	@Modifying(clearAutomatically = true)
+	@Query(value = "TRUNCATE TABLE sentence", nativeQuery = true)
+	public int truncateSentence();
+
+	@Modifying(clearAutomatically = true)
+	@Query(value = "SET FOREIGN_KEY_CHECKS = :foreignKey", nativeQuery = true)
+	public int setForeignKey(@Param("foreignKey") int foreignKey);
 }

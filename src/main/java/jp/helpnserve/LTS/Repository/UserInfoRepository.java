@@ -3,12 +3,11 @@ package jp.helpnserve.LTS.Repository;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import jp.helpnserve.LTS.Model.UserInfo;
 
@@ -47,5 +46,9 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Integer> {
 	@Modifying(clearAutomatically = true)
 	@Query(value = "UPDATE user_info SET status = 3 WHERE user_id = :user_id AND status = 2", nativeQuery = true)
 	public int updateUserInfoWhenSelect(@Param("user_id") int user_id);
+
+	@Modifying(clearAutomatically = true)
+	@Query(value = "TRUNCATE TABLE user_info", nativeQuery = true)
+	public int truncateUserInfo();
 
 }

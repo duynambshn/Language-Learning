@@ -1,5 +1,7 @@
 package jp.helpnserve.LTS.UploadingFile;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -64,6 +66,13 @@ public class FileUploadController {
 	public Boolean handleDeleteDirectory(Sound oldSound) {
 
 		storageService.deleteDir(oldSound);
+
+		return true;
+	}
+
+	public Boolean handleDeleteAll() throws IOException {
+
+		storageService.deleteAll();
 
 		return true;
 	}

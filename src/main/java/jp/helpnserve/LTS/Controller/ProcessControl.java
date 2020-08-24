@@ -17,13 +17,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -388,11 +389,10 @@ public class ProcessControl {
 	 * @return
 	 */
 	@RequestMapping(value = "/mod/csv-reg", method = RequestMethod.POST)
-	@Transactional
 	public String addNewSentenceFromCSV(@RequestParam("csvInput") MultipartFile file,
 			@RequestParam("audioInput") MultipartFile[] audio, RedirectAttributes redirectAttribute) {
 
-		int row = 1;
+		int row = 0;
 
 		try {
 
@@ -406,6 +406,15 @@ public class ProcessControl {
 			Dictionary dictionary = dictionaryRepo.findById(1).get();
 			Sentence sentence;
 
+			// DELETE AND RESET AUTOINCREMENT
+			sentenceRepo.setForeignKey(0);
+			sentenceRepo.truncateSentence();
+			userInfoRepository.truncateUserInfo();
+			soundRepository.truncateSound();
+			sentenceRepo.setForeignKey(1);
+			// DELETE SOUND FILE
+			fileUploadController.handleDeleteAll();
+
 			for (String[] data : csvData) {
 
 				// processing row
@@ -418,12 +427,14 @@ public class ProcessControl {
 				sentence.setExplanation(data[3]);
 
 				if (data[4] != "") {
-					Optional<MultipartFile> input = Arrays.stream(audio).filter(x -> x.getOriginalFilename() == data[4])
-							.findFirst();
+					Optional<MultipartFile> input = Arrays.stream(audio)
+							.filter(x -> x.getOriginalFilename().equals(data[4])).findFirst();
 
 					if (input.isPresent()) {
 						sentence.setSound(soundService.CreateNewSound(input.get()));
 					}
+
+					audio = ArrayUtils.removeElement(audio, input);
 				}
 
 				sentenceRepo.save(sentence);
@@ -431,6 +442,7 @@ public class ProcessControl {
 
 			redirectAttribute.addFlashAttribute("success", "追加は成功しました。");
 		} catch (Exception e) {
+			System.out.print(e);
 			redirectAttribute.addFlashAttribute("error", row + "行にエラーが発生しました。");
 		}
 

@@ -12,6 +12,7 @@ public class StorageProperties {
 	// private String location = "src\\main\\resources\\resources\\uploadDir"; //
 
 	// centos evn
+	// private String location =
 	private String location = "/usr/share/tomcat9/webapps/word-training/WEB-INF/classes/resources/uploadDir";
 
 	public String getLocation() {

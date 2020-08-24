@@ -1,5 +1,6 @@
 package jp.helpnserve.LTS.UploadingFile.Storage;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
@@ -20,7 +21,7 @@ public interface StorageService {
 
 	Resource loadAsResource(String filename);
 
-	void deleteAll();
+	void deleteAll() throws IOException;
 
 	void deleteDir(Sound sound);
 
